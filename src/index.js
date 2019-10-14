@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import NextAnecdote from './components/NextAnecdote';
+import Vote from './components/Vote';
 
 const App = (props) => {
     const [selected, setSelected] = useState(0);
+    const [voteCount, setVoteCount] = useState(0);
+
+    const points = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    console.log(points[0]);
+
+
 
     function randomIntFromInterval(min, max) { // min and max included 
         const result = Math.floor(Math.random() * (max - min + 1) + min);
@@ -19,11 +26,23 @@ const App = (props) => {
 
     }
 
+    const updateVoteCount = (value) => {
+        return () => {
+
+            setVoteCount(value);
+
+        }
+
+    }
+
+
+    console.log(voteCount);
 
 
     return (
         <div>
             {props.anecdotes[selected]}
+            <Vote handleVote={updateVoteCount(voteCount + 1)} numberOfVotes={voteCount} />
             <NextAnecdote handleClick={() => generateNextAnecdote(randomIntFromInterval(0, anecdotes.length - 1))} />
 
         </div>
