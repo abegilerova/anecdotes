@@ -5,12 +5,10 @@ import Vote from './components/Vote';
 
 const App = (props) => {
     const [selected, setSelected] = useState(0);
-    const [voteCount, setVoteCount] = useState(0);
+    const [voteCount, setVoteCount] = useState(new Array(props.anecdotes.length).fill(0));
 
-    const points = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    console.log(points[0]);
-
-
+    console.log(typeof voteCount);
+    console.log(voteCount.length);
 
     function randomIntFromInterval(min, max) { // min and max included 
         const result = Math.floor(Math.random() * (max - min + 1) + min);
@@ -27,13 +25,16 @@ const App = (props) => {
     }
 
     const updateVoteCount = (value) => {
-        return () => {
+        const copy = { ...voteCount };
+        copy[value] += 1;
 
-            setVoteCount(value);
+        setVoteCount(copy);
 
-        }
+
 
     }
+
+
 
 
     console.log(voteCount);
@@ -41,10 +42,14 @@ const App = (props) => {
 
     return (
         <div>
+            <h1>Anecdote of the day</h1>
             {props.anecdotes[selected]}
-            <Vote handleVote={updateVoteCount(voteCount + 1)} numberOfVotes={voteCount} />
-            <NextAnecdote handleClick={() => generateNextAnecdote(randomIntFromInterval(0, anecdotes.length - 1))} />
-
+            <div>
+                <Vote handleVote={updateVoteCount(selected)} numberOfVotes={voteCount[selected]} />
+                <NextAnecdote handleClick={() => generateNextAnecdote(randomIntFromInterval(0, anecdotes.length - 1))} />
+            </div>
+            <h1>Anecdote with most votes</h1>
+            <div> {props.anecdotes[voteCount.indexOf(Math.max(...voteCount))]} </div>
         </div>
     )
 }
